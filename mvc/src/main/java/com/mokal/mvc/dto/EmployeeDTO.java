@@ -12,10 +12,10 @@ public class EmployeeDTO {
     private Boolean isActive;
 
 
-    public EmployeeData(){
+    public EmployeeDTO(){
 
     }
-    public EmployeeData(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive) {
+    public EmployeeDTO(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.email = email;
