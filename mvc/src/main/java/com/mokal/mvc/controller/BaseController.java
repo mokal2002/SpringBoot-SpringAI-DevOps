@@ -4,6 +4,7 @@ package com.mokal.mvc.controller;
 import com.mokal.mvc.dto.EmployeeDTO;
 import com.mokal.mvc.entities.EmployeeEntity;
 import com.mokal.mvc.repository.EmployeeRepository;
+import com.mokal.mvc.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -12,12 +13,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/emp")
 public class BaseController {
+//    Controller Layer
+//    private final EmployeeRepository employeeRepository;
+//
+//    public BaseController(EmployeeRepository employeeRepository) {
+//        this.employeeRepository = employeeRepository;
+//    }
 
-    private final EmployeeRepository employeeRepository;
+    //Service Layer
+    private final EmployeeService employeeService;
 
-    public BaseController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public BaseController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
+
 
     @GetMapping(path = "/test")
     public String Test(){
@@ -33,10 +42,20 @@ public class BaseController {
 //    }
 
     @GetMapping("{empID}")
-    public EmployeeEntity getEmployeeById(@PathVariable Long empID){
-        return employeeRepository.findById(empID).orElse(null);
+    public EmployeeDTO getEmployeeById(@PathVariable Long empID){
+        return employeeService.getEmployeeByID(empID);
     }
 
+    @GetMapping
+    public List<EmployeeDTO> getAllEmployee(){
+        return employeeService.getAllEmployee();
+    }
+
+    @PostMapping
+    public EmployeeDTO createNewEmployee(@RequestBody EmployeeEntity inputEmployee){
+        return employeeService.createNewEmployee(inputEmployee);
+
+    }
 
 
     // Getting Data With Params ?
@@ -53,14 +72,14 @@ public class BaseController {
 //        return employeeRepository.findAll();
 //    }
 
-    @GetMapping
-    public List<EmployeeEntity> getAllEmployess(){
-        return employeeRepository.findAll();
-    }
-
-    @PostMapping
-    public EmployeeEntity createNewEmployee(@RequestBody EmployeeEntity inputEmployee){
-        return employeeRepository.save(inputEmployee);
-
-    }
+//    @GetMapping
+//    public List<EmployeeEntity> getAllEmployess(){
+//        return employeeRepository.findAll();
+//    }
+//
+//    @PostMapping
+//    public EmployeeEntity createNewEmployee(@RequestBody EmployeeEntity inputEmployee){
+//        return employeeRepository.save(inputEmployee);
+//
+//    }
 }
