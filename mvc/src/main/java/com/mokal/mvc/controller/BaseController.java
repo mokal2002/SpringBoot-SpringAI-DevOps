@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/emp")
@@ -57,6 +59,20 @@ public class BaseController {
 
     }
 
+    @PutMapping("/{empId}")
+    public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long empId){
+        return employeeService.updateEmployee(employeeDTO, empId);
+    }
+
+    @DeleteMapping("/{empId}")
+    public void deleteEmployee(@PathVariable Long empId){
+        employeeService.deleteEmployee(empId);
+    }
+
+    @PatchMapping("/{empId}")
+    public EmployeeDTO updatePartialEmployeeById(@RequestBody Map<String, Object> updates, @PathVariable Long empId){
+        return employeeService.updatePartialEmployeeById(empId, updates);
+    }
 
     // Getting Data With Params ?
     //http://localhost:8080/emp?age=23&sortBy=Aniket
