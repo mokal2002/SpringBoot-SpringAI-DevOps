@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -30,9 +31,10 @@ public class EmployeeService {
         this.modelMapper = modelMapper;
     }
 
-    public EmployeeDTO getEmployeeByID(Long empID) {
-        EmployeeEntity employeeEntity = employeeRepository.findById(empID).orElse(null);
-        return modelMapper.map(employeeEntity, EmployeeDTO.class);
+    public Optional<EmployeeDTO> getEmployeeByID(Long empID) {
+//        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(empID);
+//        return employeeEntity.map(employeeEntity1 -> modelMapper.map(employeeEntity1, EmployeeDTO.class));
+        return employeeRepository.findById(empID).map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class));
     }
 
     public List<EmployeeDTO> getAllEmployee() {
