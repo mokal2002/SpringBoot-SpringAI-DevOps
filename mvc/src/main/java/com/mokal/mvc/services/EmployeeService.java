@@ -4,6 +4,7 @@ package com.mokal.mvc.services;
 import com.mokal.mvc.config.MapperConfig;
 import com.mokal.mvc.dto.EmployeeDTO;
 import com.mokal.mvc.entities.EmployeeEntity;
+import com.mokal.mvc.exceptions.ResourceNotFoundException;
 import com.mokal.mvc.repository.EmployeeRepository;
 import org.apache.el.util.ReflectionUtil;
 import org.aspectj.util.Reflection;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.expression.spel.support.ReflectiveIndexAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.lang.reflect.Field;
 import java.nio.file.Files;
@@ -44,6 +46,11 @@ public class EmployeeService {
                 .map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class))
                 .collect(Collectors.toList());
     }
+    public boolean isExistsByEmployeeId(Long empId){
+        boolean exists = employeeRepository.existsById(empId);
+        if (!exists) throw new ResourceNotFoundException("Employee not found with this ID :"+empId);
+        return true;
+    }
 
 
     public EmployeeDTO createNewEmployee(EmployeeEntity inputEmployee) {
@@ -54,6 +61,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO, Long empId) {
+        isExistsByEmployeeId(empId);
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
         employeeEntity.setId(empId);
         EmployeeEntity savedEmployeeEntity = employeeRepository.save(employeeEntity);
@@ -61,16 +69,14 @@ public class EmployeeService {
 
     }
 
-    public boolean isExistsByEmployeeId(Long empId){
-        return employeeRepository.existsById(empId);
-    }
+
     public void deleteEmployee(Long empId) {
+        isExistsByEmployeeId(empId);
         employeeRepository.deleteById(empId);
     }
 
     public EmployeeDTO updatePartialEmployeeById(Long empId, Map<String, Object> updates) {
-        boolean exists = isExistsByEmployeeId(empId);
-        if (!exists) return null;
+        isExistsByEmployeeId(empId);
         EmployeeEntity employeeEntity = employeeRepository.findById(empId).get();
         updates.forEach((field, value) -> {
             Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class,field);

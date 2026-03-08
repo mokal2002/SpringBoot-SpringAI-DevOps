@@ -3,18 +3,17 @@ package com.mokal.mvc.controller;
 
 import com.mokal.mvc.dto.EmployeeDTO;
 import com.mokal.mvc.entities.EmployeeEntity;
+import com.mokal.mvc.exceptions.ResourceNotFoundException;
 import com.mokal.mvc.repository.EmployeeRepository;
 import com.mokal.mvc.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/emp")
@@ -53,9 +52,13 @@ public class BaseController {
         Optional<EmployeeDTO> employeeDTO =  employeeService.getEmployeeByID(empID);
 //        if (employeeDTO == null) return ResponseEntity.notFound().build();
 //        return ResponseEntity.ok(employeeDTO);
+//        return employeeDTO
+//                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1)) //.map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
         return employeeDTO
-                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1)) //.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Not Found with the ID : "+empID));
+
     }
 
     @GetMapping
@@ -66,7 +69,7 @@ public class BaseController {
 
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeEntity inputEmployee){
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody @Valid EmployeeEntity inputEmployee){
 //        return employeeService.createNewEmployee(inputEmployee);
         EmployeeDTO savedEmployee = employeeService.createNewEmployee(inputEmployee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
