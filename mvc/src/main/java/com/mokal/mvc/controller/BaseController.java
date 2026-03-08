@@ -4,15 +4,12 @@ package com.mokal.mvc.controller;
 import com.mokal.mvc.dto.EmployeeDTO;
 import com.mokal.mvc.entities.EmployeeEntity;
 import com.mokal.mvc.exceptions.ResourceNotFoundException;
-import com.mokal.mvc.repository.EmployeeRepository;
 import com.mokal.mvc.services.EmployeeService;
 import jakarta.validation.Valid;
-import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.*;
 
 @RestController
