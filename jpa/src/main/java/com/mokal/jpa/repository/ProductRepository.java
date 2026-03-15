@@ -1,6 +1,8 @@
 package com.mokal.jpa.repository;
 
 import com.mokal.jpa.entity.Product;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -27,4 +29,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("select e from Product e where e.title=:title and e.price=:price")
     Optional<Product> findByTitleAndPrice(String title, BigDecimal price);
+
+    //3.4
+    List<Product> findByTitleOrderByPrice(String title);
+
+    List<Product> findByOrderByPrice();
+
+    List<Product> findBy(String title, Pageable pageable);
+
+    List<Product> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
 }
