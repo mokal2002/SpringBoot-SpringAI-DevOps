@@ -1,6 +1,8 @@
 package com.mokal.springsecurityapp.config;
 
 
+import com.mokal.springsecurityapp.filters.JwtAuthFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,20 +17,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final JwtAuthFilter  jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/posts", "/error", "/auth/**").permitAll()
-                        .requestMatchers("/posts/**").hasAllRoles("ADMIN")
+//                        .requestMatchers("/posts/**").hasAllRoles("ADMIN")
                         .anyRequest().authenticated())
                 .csrf(csrfConfig -> csrfConfig.disable())
-                .sessionManagement(sessionconfig -> sessionconfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(sessionconfig -> sessionconfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 //                .formLogin(Customizer.withDefaults());
 
         return http.build();
@@ -55,8 +62,5 @@ public class WebSecurityConfig {
 //        return  new InMemoryUserDetailsManager(normalUser, adminUser);
 //    }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 }
