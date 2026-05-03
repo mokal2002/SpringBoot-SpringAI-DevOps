@@ -8,6 +8,7 @@ import com.mokal.springsecurityapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +29,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User with email "+ username +" not found"));
+                .orElseThrow(() -> new BadCredentialsException( "User with email "+ username +" not found"));
     }
 
     public User getUserById(Long id) {
