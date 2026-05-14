@@ -32,8 +32,17 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new BadCredentialsException( "User with email "+ username +" not found"));
     }
 
+//    public User getUserByEmail(String email) {
+//        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User with email "+ email +" not found"));
+//    }
+
+
+    public Optional<User> findUserByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with id "+ id +" not found"));
+        return userRepository.findById(id).orElse(null);
     }
 
 
@@ -50,4 +59,7 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public User save(User newUser) {
+        return userRepository.save(newUser);
+    }
 }
