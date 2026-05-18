@@ -2,10 +2,12 @@ package com.mokal.springsecurityapp.services;
 
 import com.mokal.springsecurityapp.dto.PostDTO;
 import com.mokal.springsecurityapp.entities.PostEntity;
+import com.mokal.springsecurityapp.entities.User;
 import com.mokal.springsecurityapp.exceptions.ResourceNotFoundException;
 import com.mokal.springsecurityapp.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +30,9 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostDTO createNewPost(PostDTO inputPost) {
-        PostEntity postEntity = modelMapper.map(inputPost, PostEntity.class);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PostEntity postEntity = modelMapper.map(inputPost,PostEntity.class);
+        postEntity.setAuthor(user);
         return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
     }
 
