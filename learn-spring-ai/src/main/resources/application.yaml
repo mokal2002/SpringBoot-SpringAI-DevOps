@@ -7,3 +7,15 @@ spring:
       chat:
         options:
           model: qwen3:30b
+    google:
+      genai:
+        api-key:
+        chat:
+          options:
+            model: gemini-2.5-flash-lite
+            temperature: 0.9
+
+logging:
+  level:
+    org.springframework.ai:
+      chat.client: DEBUG
