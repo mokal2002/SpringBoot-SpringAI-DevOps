@@ -1,3 +1,53 @@
+#spring:
+#  application:
+#    name: learn-spring-ai
+#  ai:
+#    model:
+#      chat: openai          # explicitly selects the OpenAI-protocol chat client (→ NVIDIA), since google-genai chat autoconfig is also on the classpath
+#
+#    ollama:
+#      base-url: http://localhost:11434
+#      chat:
+#        options:
+#          model: qwen3:30b
+#
+#    openai:
+#      api-key: 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
+#      base-url: https://integrate.api.nvidia.com/v1
+#      chat:
+#        options:
+#          model: z-ai/glm-5.2
+#          temperature: 0.9
+#
+#    google:
+#      genai:
+#        #        project-id: gen-lang-client-0222063252
+#        ##        location:
+#        api-key:
+#        embedding:
+#          api-key:
+#          text:
+#            model: text-embedding-004
+#
+#    vectorstore:
+#      pgvector:
+#        initialize-schema: true
+#        index-type: NONE
+#
+#  datasource:
+#    url: jdbc:postgresql://localhost:5434/my-test-vector-db
+#    username: my-user
+#    password: password
+#    driver-class-name: org.postgresql.Driver
+#
+#logging:
+#  level:
+#    org.springframework.ai:
+#      chat.client: DEBUG
+
+
+
+
 spring:
   application:
     name: learn-spring-ai
@@ -9,11 +59,30 @@ spring:
           model: qwen3:30b
     google:
       genai:
+#        project-id: gen-lang-client-0222063252
+##        location:
         api-key:
         chat:
           options:
             model: gemini-2.5-flash-lite
             temperature: 0.9
+        embedding:
+          api-key:
+          text:
+            model: text-embedding-004
+
+
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: NONE
+
+
+  datasource:
+    url: jdbc:postgresql://localhost:5434/my-test-vector-db
+    username: my-user
+    password: password
+    driver-class-name: org.postgresql.Driver
 
 logging:
   level:
