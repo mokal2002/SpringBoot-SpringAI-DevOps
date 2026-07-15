@@ -14,6 +14,13 @@ public class AIServiceTests {
     @Autowired
     private AIService aiService;
 
+
+    @Test
+    void testAskAI() {
+        String cat = aiService.askAI("Spring Boot is a Java framework used to build production-ready applications quickly");
+        System.out.println(cat);
+    }
+
     @Test
     void getJokeTest() {
         String cat = aiService.getJoke("Cat");
@@ -31,7 +38,7 @@ public class AIServiceTests {
 
     @Test
     void getDataToVector() {
-        aiService.ingestDatatoVectorStore("This is a test");
+        aiService.ingestDatatoVectorStore();
     }
 
     @Test
@@ -39,4 +46,6 @@ public class AIServiceTests {
         var thisIsATest = aiService.similaritySearch("This is a test");
         System.out.println(thisIsATest);
     }
+
+
 }
