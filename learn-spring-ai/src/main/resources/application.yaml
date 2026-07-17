@@ -59,24 +59,27 @@ spring:
           model: qwen3:30b
     google:
       genai:
-#        project-id: gen-lang-client-0222063252
-##        location:
+        #        project-id: gen-lang-client-0222063252
+        ##        location:
         api-key:
         chat:
           options:
             model: gemini-2.5-flash-lite
             temperature: 0.9
         embedding:
-          api-key: 
+          api-key:
           text:
             model: text-embedding-004
-
-
     vectorstore:
       pgvector:
         initialize-schema: true
         index-type: NONE
-
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+            table-name: chat_memory
 
   datasource:
     url: jdbc:postgresql://localhost:5434/my-test-vector-db

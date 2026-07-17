@@ -1,10 +1,15 @@
 package com.mokal.learn_spring_ai.service;
 
+import com.mokal.learn_spring_ai.advisor.TokenUsageAdvisor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 // 1. Ensure you use the exact imports for Spring AI 1.1.8
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory; // Import this instead
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
@@ -25,6 +30,7 @@ public class RAGService {
 
     private final ChatClient chatClient;
     private final VectorStore vectorStore;
+    private final ChatMemory chatMemory;
 
     @Value("classpath:FinalScienticAmericanArticle.pdf")
     private Resource pdffile;
@@ -35,10 +41,23 @@ public class RAGService {
                 .system("You are a helpful AI assistant.")
                 .user(prompt)
                 .advisors(
+//                        new SafeGuardAdvisor(List.of("Politics","Cricket")),
+
+                        MessageChatMemoryAdvisor.builder(chatMemory)
+                                .build(),
                         // Safe stateless builder configuration
                         VectorStoreChatMemoryAdvisor.builder(vectorStore)
                                 .defaultTopK(4)
-                                .build()
+                                .build(),
+
+                        QuestionAnswerAdvisor.builder(vectorStore)
+                                .searchRequest(SearchRequest.builder()
+                                        .filterExpression("file_name == 'FinalScienticAmericanArticle.pdf'")
+                                        .topK(4)
+                                        .build())
+                                .build(),
+                        new TokenUsageAdvisor()
+
                 )
                 // Dynamically assign the context using the upgraded 1.1.8 property mapping
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, userId))

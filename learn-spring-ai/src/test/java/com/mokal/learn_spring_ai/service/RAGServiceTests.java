@@ -24,7 +24,7 @@ public class RAGServiceTests {
 
     @Test
     void testAskAIWithAdvisor() {
-        var response = ragService.askAIWithAdvisors("What is my Name?", "mokal29s");
+        var response = ragService.askAIWithAdvisors("What is my name?", "mokal29");
         System.out.println(response);
     }
 }
