@@ -1,6 +1,8 @@
 package com.mokal.learn_spring_ai.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,6 +11,8 @@ public class AIConfig {
 
     @Bean
     public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
-        return chatClientBuilder.build();
+        return chatClientBuilder
+                .defaultAdvisors(new SimpleLoggerAdvisor())
+                .build();
     }
 }

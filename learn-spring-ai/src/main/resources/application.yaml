@@ -67,7 +67,7 @@ spring:
             model: gemini-2.5-flash-lite
             temperature: 0.9
         embedding:
-          api-key:
+          api-key: 
           text:
             model: text-embedding-004
 

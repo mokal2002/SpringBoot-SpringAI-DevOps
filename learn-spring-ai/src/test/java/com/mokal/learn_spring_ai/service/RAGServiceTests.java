@@ -21,4 +21,10 @@ public class RAGServiceTests {
         var response = ragService.askAI("tell me about blackhole intresting");
         System.out.println(response);
     }
+
+    @Test
+    void testAskAIWithAdvisor() {
+        var response = ragService.askAIWithAdvisors("What is my Name?", "mokal29s");
+        System.out.println(response);
+    }
 }
